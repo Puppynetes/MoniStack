@@ -263,9 +263,9 @@ Exception: java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler i
 
 Exception: java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler in thread "Catalina-utility-1"
 
-</details>
-
+```
 ---
+</details>
 
 
 ### 8. Grafana 대시보드를 통한 모니터링 확인
