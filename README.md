@@ -64,9 +64,9 @@ Prometheus와 Grafana를 기반으로 상태 시각화 및 부하 테스트 대�
 👉 빠르게 설치하고 바로 웹에서 대시보드 구성 시작할 수 있음.
 
 ---
-# 스프링 부트 어플리케이션
+# Spring Boot 애플리케이션 성능 및 부하 테스트
 
-## 1. 프로메테우스와 Swagger에 관련된 의존성 build.gradle에 추가
+## 1. build.gradle에 Prometheus와 Swagger 관련 의존성 설정
 
 1️⃣ **`springdoc-openapi-starter-webmvc-ui`**
 
@@ -80,7 +80,7 @@ Prometheus와 Grafana를 기반으로 상태 시각화 및 부하 테스트 대�
 
 - `/actuator/metrics`, `/actuator/prometheus` 등 애플리케이션 상태 및 성능 모니터링용 엔드포인트 제공
 
-## 2. Swagger 관련 config 파일 생성
+## 2. Swagger 설정을 위한 Config 파일 생성
 
 ```java
 @Configuration    // 스프링 실행시 설정파일 읽어드리기 위한 어노테이션
@@ -101,7 +101,7 @@ public class SwaggerConfig {
 }
 ```
 
-## 3. 부하테스트를 위한 객체 생성, 객체 체크, 객체 삭제 API
+## 3. 부하 테스트용 객체 생성·조회·삭제 API 구현
 
 ```java
 @Service
@@ -160,7 +160,7 @@ public class StreamService {
 
 ```
 
-## 4. JAR파일을 생성 후 우분투 서버로 옮김
+## 4. Spring Boot 애플리케이션을 JAR 파일로 빌드한 후, Ubuntu 서버로 배포
 
 Window CMD 사용
 
@@ -170,7 +170,7 @@ JAR파일을 MobaXterm을 이용하여 우분투 서버로 옮김
 
 ⚠️ 이떄 우분투 서버에는 JDK 설치가 되어있어야 한다.
 
-## 5. prometheus.yml 수정 후 프로메테우스 재실행
+## 5. Prometheus 설정 파일 수정 후 서비스 재시작
 
 ```bash
 sudo vi /etc/prometheus/prometheus.yml
@@ -198,17 +198,17 @@ scrape_configs:
 sudo systemctl restart prometheus.service
 ```
 
-## 6. 프로메테우스 Target health에 스프링 부트 앱 추가 확인
+## 6. Prometheus에서 Spring Boot 앱 상태(Target health) 확인
 
 ![image (7)](https://github.com/user-attachments/assets/4d6f65b3-f4fd-4b9f-9947-2c3fd1d36886)
 
-## 7. Swagger API 요청을 이용한 부하 테스트
+## 7. Swagger 기반 API 요청을 활용한 부하 테스트
 
 주소 : `http://IP주소:8080/swagger-ui/index.html#/`
 ![image (8)](https://github.com/user-attachments/assets/74d70a75-b16b-48f0-8cf6-a7cc34fe506f)
 
 
-## 8. 그라파나 대시보드에서 확인
+## 8. Grafana 대시보드를 통한 모니터링 확인
 
 1. [localhost:3000](http://localhost:3000) 으로 그라파나 접속
 2. Dashboards → Import → 4701(스프링 부트 어플리케이션)입력 후 Load 버튼 클릭
