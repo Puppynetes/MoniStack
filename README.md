@@ -220,6 +220,97 @@ sudo systemctl restart prometheus.service
 주소 : `http://IP주소:8080/swagger-ui/index.html#/`
 ![image (8)](https://github.com/user-attachments/assets/74d70a75-b16b-48f0-8cf6-a7cc34fe506f)
 
+### 7. Swagger 기반 API 요청을 활용한 부하 테스트
+
+주소 : `http://IP주소:8080/swagger-ui/index.html#/`
+![image (8)](https://github.com/user-attachments/assets/74d70a75-b16b-48f0-8cf6-a7cc34fe506f)
+
+**⚠️ 주의사항**
+
+객체를 생성만 하고 삭제하지 않을 경우, Spring Boot 애플리케이션에서 OutOfMemoryError(OOM) 가 발생해 자동으로 종료될 수 있음
+
+<details>
+<summary>오류 로그</summary>
+	
+```bash	
+Exception in thread "Thread-1" java.lang.OutOfMemoryError: Java heap space
+        at java.base/java.util.Arrays.copyOf(Arrays.java:3481)
+        at java.base/java.util.concurrent.CopyOnWriteArrayList.add(CopyOnWriteArrayList.java:432)
+        at fisa.test.service.StreamService.lambda$startHeavyLoad$1(StreamService.java:33)
+        at fisa.test.service.StreamService$$Lambda$1366/0x000078e4ec609638.run(Unknown Source)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+
+Exception: java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler in thread "http-nio-8080-Poller"
+Exception in thread "Catalina-utility-2" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "http-nio-8080-exec-3" java.lang.OutOfMemoryError: Java heap space
+2025-04-04T06:00:44.866Z ERROR 20588 --- [test] [alina-utility-1] o.a.coyote.http11.Http11NioProtocol      : Error processing async timeouts
+
+java.util.concurrent.ExecutionException: java.lang.OutOfMemoryError: Java heap space
+        at java.base/java.util.concurrent.FutureTask.report(FutureTask.java:122) ~[na:na]
+        at java.base/java.util.concurrent.FutureTask.get(FutureTask.java:191) ~[na:na]
+        at org.apache.coyote.AbstractProtocol.startAsyncTimeout(AbstractProtocol.java:660) ~[tomcat-embed-core-10.1.39.jar!/:na]
+        at org.apache.coyote.AbstractProtocol.lambda$start$0(AbstractProtocol.java:646) ~[tomcat-embed-core-10.1.39.jar!/:na]
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) ~[na:na]
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305) ~[na:na]
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305) ~[na:na]
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) ~[na:na]
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) ~[na:na]
+        at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.39.jar!/:na]
+        at java.base/java.lang.Thread.run(Thread.java:840) ~[na:na]
+Caused by: java.lang.OutOfMemoryError: Java heap space
+
+Exception: java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler in thread "pool-2-thread-1"
+
+Exception: java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler in thread "Catalina-utility-1"
+
+</details>
+
+---
+
+
+### 8. Grafana 대시보드를 통한 모니터링 확인
+
+1. [localhost:3000](http://localhost:3000) 으로 그라파나 접속
+2. Dashboards → Import → 4701(스프링 부트 어플리케이션)입력 후 Load 버튼 클릭
+3. 과부화 테스트의 결과 확인 
+![image (9)](https://github.com/user-attachments/assets/891fd9d1-0875-4b24-abf7-f641845f383d)
+
+
+### 9. 주의사항 - 객체를 생성만 하고 삭제하지 않을 경우
+
+스프링 부트 애플리케이션이 **OutOfMemoryError(OOM)** 발생 후 자동 종료될 수 있음.
+```java
+Exception in thread "Thread-1" java.lang.OutOfMemoryError: Java heap space
+        at java.base/java.util.Arrays.copyOf(Arrays.java:3481)
+        at java.base/java.util.concurrent.CopyOnWriteArrayList.add(CopyOnWriteArrayList.java:432)
+        at fisa.test.service.StreamService.lambda$startHeavyLoad$1(StreamService.java:33)
+        at fisa.test.service.StreamService$$Lambda$1366/0x000078e4ec609638.run(Unknown Source)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+
+Exception: java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler in thread "http-nio-8080-Poller"
+Exception in thread "Catalina-utility-2" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "http-nio-8080-exec-3" java.lang.OutOfMemoryError: Java heap space
+2025-04-04T06:00:44.866Z ERROR 20588 --- [test] [alina-utility-1] o.a.coyote.http11.Http11NioProtocol      : Error processing async timeouts
+
+java.util.concurrent.ExecutionException: java.lang.OutOfMemoryError: Java heap space
+        at java.base/java.util.concurrent.FutureTask.report(FutureTask.java:122) ~[na:na]
+        at java.base/java.util.concurrent.FutureTask.get(FutureTask.java:191) ~[na:na]
+        at org.apache.coyote.AbstractProtocol.startAsyncTimeout(AbstractProtocol.java:660) ~[tomcat-embed-core-10.1.39.jar!/:na]
+        at org.apache.coyote.AbstractProtocol.lambda$start$0(AbstractProtocol.java:646) ~[tomcat-embed-core-10.1.39.jar!/:na]
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) ~[na:na]
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305) ~[na:na]
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305) ~[na:na]
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) ~[na:na]
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) ~[na:na]
+        at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.39.jar!/:na]
+        at java.base/java.lang.Thread.run(Thread.java:840) ~[na:na]
+Caused by: java.lang.OutOfMemoryError: Java heap space
+
+Exception: java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler in thread "pool-2-thread-1"
+
+Exception: java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler in thread "Catalina-utility-1"
+
+```
 
 ### 8. Grafana 대시보드를 통한 모니터링 확인
 
