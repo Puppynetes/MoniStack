@@ -382,9 +382,10 @@ sysbench \
 ## :white_check_mark: 7. Grafana Dashboard 확인
 
 - Grafana에서 대시보드로 실시간 메트릭 확인
-- 예: TPS, 커넥션 수, 쿼리 속도, 캐시 히트율 등 시각화 확인
+- TPS, 커넥션 수, 쿼리 속도, 캐시 히트율 등 시각화 확인
 
-*(필요 시 스크린샷 추가)*
+![image](https://github.com/user-attachments/assets/7fc2dc05-f29e-4b17-808b-741f51b1f1b3)
+
 
 ---
 
