@@ -8,9 +8,10 @@
 ## 목차
 1. [🙆🏻‍♂️ 팀원](#%EF%B8%8F-팀원)
 2. [🌱 프로젝트 개요: Docker & K8s를 활용한 SpringBoot App 배포](#-프로젝트-개요-docker--k8s를-활용한-springboot-app-배포)
-3. [🛠️ 실습 과정](#%EF%B8%8F-실습-과정)
-4. [📖 배운 점](#-배운-점)
-5. [💜 회고](#-회고)
+3. [💻개발환경](#-개발환경)
+4. [🛠️ 실습 과정](#%EF%B8%8F-실습-과정)
+5. [📖 배운 점](#-배운-점)
+6. [💜 회고](#-회고)
 
 ## 🙆🏻‍♂️ 팀원
 
@@ -64,9 +65,21 @@ Prometheus와 Grafana를 기반으로 상태 시각화 및 부하 테스트 대�
 👉 빠르게 설치하고 바로 웹에서 대시보드 구성 시작할 수 있음.
 
 ---
-# Spring Boot 애플리케이션 성능 및 부하 테스트
+## 💻 개발환경  
 
-## 1. build.gradle에 Prometheus와 Swagger 관련 의존성 설정
+| 항목         | 사용 기술 및 도구          | 설명                                      |
+|-------------|------------------|--------------------------------|
+| **OS**       | Ubuntu           | 메인 서버 |
+| **가상화**   | VMware, VirtualBox | 가상 머신 실행 및 관리 |
+| **백엔드**   | Spring Boot      | 서버 애플리케이션   |
+| **API 문서화** | Swagger          | API 명세 자동화 및 UI 제공 |
+| **데이터베이스** | MySQL            | 데이터 저장 및 관리 |
+| **모니터링**  | Prometheus       | 애플리케이션 및 시스템 메트릭 수집 |
+| **시각화**   | Grafana          | Prometheus 데이터를 기반으로 시각화 |
+
+## Spring Boot 애플리케이션 성능 및 부하 테스트
+
+### 1. build.gradle에 Prometheus와 Swagger 관련 의존성 설정
 
 1️⃣ **`springdoc-openapi-starter-webmvc-ui`**
 
@@ -80,7 +93,7 @@ Prometheus와 Grafana를 기반으로 상태 시각화 및 부하 테스트 대�
 
 - `/actuator/metrics`, `/actuator/prometheus` 등 애플리케이션 상태 및 성능 모니터링용 엔드포인트 제공
 
-## 2. Swagger 설정을 위한 Config 파일 생성
+### 2. Swagger 설정을 위한 Config 파일 생성
 
 ```java
 @Configuration    // 스프링 실행시 설정파일 읽어드리기 위한 어노테이션
@@ -101,7 +114,7 @@ public class SwaggerConfig {
 }
 ```
 
-## 3. 부하 테스트용 객체 생성·조회·삭제 API 구현
+### 3. 부하 테스트용 객체 생성·조회·삭제 API 구현
 
 ```java
 @Service
@@ -160,7 +173,7 @@ public class StreamService {
 
 ```
 
-## 4. Spring Boot 애플리케이션을 JAR 파일로 빌드한 후, Ubuntu 서버로 배포
+### 4. Spring Boot 애플리케이션을 JAR 파일로 빌드한 후, Ubuntu 서버로 배포
 
 Window CMD 사용
 
@@ -168,9 +181,9 @@ cd 프로젝트 경로 → `gradlew.bat clean bootJar`  → JAR 생성 완료(�
 
 JAR파일을 MobaXterm을 이용하여 우분투 서버로 옮김
 
-⚠️ 이떄 우분투 서버에는 JDK 설치가 되어있어야 한다.
+⚠️ 이때 우분투 서버에는 JDK 설치가 되어있어야 한다.
 
-## 5. Prometheus 설정 파일 수정 후 서비스 재시작
+### 5. Prometheus 설정 파일 수정 후 서비스 재시작
 
 ```bash
 sudo vi /etc/prometheus/prometheus.yml
@@ -198,17 +211,17 @@ scrape_configs:
 sudo systemctl restart prometheus.service
 ```
 
-## 6. Prometheus에서 Spring Boot 앱 상태(Target health) 확인
+### 6. Prometheus에서 Spring Boot 앱 상태(Target health) 확인
 
 ![image (7)](https://github.com/user-attachments/assets/4d6f65b3-f4fd-4b9f-9947-2c3fd1d36886)
 
-## 7. Swagger 기반 API 요청을 활용한 부하 테스트
+### 7. Swagger 기반 API 요청을 활용한 부하 테스트
 
 주소 : `http://IP주소:8080/swagger-ui/index.html#/`
 ![image (8)](https://github.com/user-attachments/assets/74d70a75-b16b-48f0-8cf6-a7cc34fe506f)
 
 
-## 8. Grafana 대시보드를 통한 모니터링 확인
+### 8. Grafana 대시보드를 통한 모니터링 확인
 
 1. [localhost:3000](http://localhost:3000) 으로 그라파나 접속
 2. Dashboards → Import → 4701(스프링 부트 어플리케이션)입력 후 Load 버튼 클릭
@@ -216,7 +229,7 @@ sudo systemctl restart prometheus.service
 ![image (9)](https://github.com/user-attachments/assets/891fd9d1-0875-4b24-abf7-f641845f383d)
 
 
-## 9. 주의사항 - 객체를 생성만 하고 삭제하지 않을 경우
+### 9. 주의사항 - 객체를 생성만 하고 삭제하지 않을 경우
 
 스프링 부트 애플리케이션이 **OutOfMemoryError(OOM)** 발생 후 자동 종료될 수 있음.
 ```java
