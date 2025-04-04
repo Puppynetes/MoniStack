@@ -9,9 +9,10 @@
 1. [🙆🏻‍♂️ 팀원](#%EF%B8%8F-팀원)
 2. [🌱 프로젝트 개요: Docker & K8s를 활용한 SpringBoot App 배포](#-프로젝트-개요-docker--k8s를-활용한-springboot-app-배포)
 3. [💻개발환경](#-개발환경)
-4. [🛠️ 실습 과정](#%EF%B8%8F-실습-과정)
-5. [📖 배운 점](#-배운-점)
-6. [💜 회고](#-회고)
+4. [🛠️ Spring Boot 애플리케이션 성능 및 부하 테스트](#%EF%B8%8F-#spring-boot-애플리케이션-성능-및-부하-테스트)
+5. [🛠️ MySQL 성능 및 부하 테스트](#%EF%B8%8F)
+6. [📖 배운 점](#-배운-점)
+7. [💜 회고](#-회고)
 
 ## 🙆🏻‍♂️ 팀원
 
@@ -275,3 +276,137 @@ Exception: java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler i
 3. 과부화 테스트의 결과 확인 
 ![image (9)](https://github.com/user-attachments/assets/891fd9d1-0875-4b24-abf7-f641845f383d)
 
+## MySQL 성능 및 부하 테스트
+
+
+# :compass: MySQL 모니터링 및 부하 테스트 전체 구성 흐름
+
+```
+sysbench (부하 생성)
+    ↓
+MySQL (부하 받음)
+    ↓
+mysqld_exporter (메트릭 수집, 예: 쿼리 수, 커넥션 수 등)
+    ↓
+Prometheus (수집)
+    ↓
+Grafana (시각화)
+```
+---
+
+## :white_check_mark: 1. `mysqld_exporter` 정상 실행 확인
+
+```bash
+sudo mysqld_exporter --config.my-cnf="/etc/.my.cnf" --web.listen-address=":9104"
+```
+
+- 실행 후 브라우저에서 다음 주소에 접속하여 메트릭 확인  
+  👉 [http://localhost:9104/metrics](http://localhost:9104/metrics)
+
+---
+
+## :white_check_mark: 2. Prometheus에서 `mysqld_exporter` 추가
+
+`prometheus.yml` 파일에 다음 블록 추가
+
+```yaml
+scrape_configs:
+  - job_name: 'mysql'
+    static_configs:
+      - targets: ['localhost:9104']
+```
+
+- Prometheus는 이 설정을 통해 `mysqld_exporter`가 수집한 MySQL 메트릭을 가져옴옴
+
+---
+
+## :white_check_mark: 3. Grafana에서 MySQL 대시보드 가져오기
+
+1. Grafana에 로그인
+2. `Dashboards > Import` 메뉴로 이동
+3. 다음 대시보드 ID 입력: **7362 (MySQL Overview)**
+4. 데이터 소스로 **Prometheus** 선택
+
+---
+
+## :white_check_mark: 4. `sysbench` 설치
+
+```bash
+sudo apt update
+sudo apt install sysbench -y
+```
+
+- `sysbench`는 MySQL 안에서 실행하는 게 아니라, **리눅스 쉘(터미널)**에서 실행하는 도구
+- MySQL 서버에 외부에서 접속하여 부하를 주는 프로그램
+
+---
+
+## :white_check_mark: 5. 사전 준비: 테이블 생성
+
+```bash
+sysbench \
+  --db-driver=mysql \
+  --mysql-user=user01 \
+  --mysql-password=user01 \
+  --mysql-db=fisa \
+  --tables=10 \
+  --table-size=100000 \
+  oltp_read_write prepare
+```
+
+- `--tables=10`: 총 10개 테이블 생성  
+- `--table-size=100000`: 각 테이블에 10만 개의 row → 총 100만개 row
+
+---
+
+## :white_check_mark: 6. 부하 테스트 실행
+
+```bash
+sysbench \
+  --db-driver=mysql \
+  --mysql-user=user01 \
+  --mysql-password=user01 \
+  --mysql-db=fisa \
+  --tables=10 \
+  --table-size=100000 \
+  --threads=32 \
+  --time=300 \
+  oltp_read_write run
+```
+
+- 32개의 스레드로 300초 동안 테스트  
+- 결과에는 **TPS (Transactions Per Second)**, **응답 시간**, **에러율** 등이 출력
+
+---
+
+## :white_check_mark: 7. Grafana Dashboard 확인
+
+- Grafana에서 대시보드로 실시간 메트릭 확인
+- 예: TPS, 커넥션 수, 쿼리 속도, 캐시 히트율 등 시각화 확인
+
+*(필요 시 스크린샷 추가)*
+
+---
+
+## :white_check_mark: 8. 테스트 후 정리
+
+```bash
+sysbench \
+  --db-driver=mysql \
+  --mysql-user=user01 \
+  --mysql-password=user01 \
+  --mysql-db=fisa \
+  --tables=10 \
+  oltp_read_write cleanup
+```
+
+- 테스트가 끝난 뒤 생성된 데이터 삭제
+```bash
+sysbench \
+  --db-driver=mysql \
+  --mysql-user=user01 \
+  --mysql-password=user01 \
+  --mysql-db=fisa \
+  --tables=10 \
+  oltp_read_write cleanup
+```
