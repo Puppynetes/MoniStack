@@ -1,13 +1,13 @@
 <img src="https://capsule-render.vercel.app/api?type=waving&color=00C3FF&height=150&section=header" width="1000" />
 
 <div align="center">
-<h1 style="font-size: 36px;">🌱 Spring Boot & MySQL 성능 테스트를 위한 <br>Prometheus-Grafana 통합 모니터링</h1>
+<h1 style="font-size: 36px;">🖥️ Spring Boot & MySQL 성능 테스트를 위한 <br>Prometheus-Grafana 통합 모니터링</h1>
 </div>
 </br>
 
 ## 목차
 1. [🙆🏻‍♂️ 팀원](#%EF%B8%8F-팀원)
-2. [🌱 프로젝트 개요: Spring Boot & MySQL 성능 테스트를 위한 Prometheus-Grafana 통합 모니터링](#-프로젝트-개요-spring-boot--mysql-성능-테스트를-위한-prometheus-grafana-통합-모니터링-)
+2. [🖥️ 프로젝트 개요: Spring Boot & MySQL 성능 테스트를 위한 Prometheus-Grafana 통합 모니터링](#%EF%B8%8F-프로젝트-개요-spring-boot--mysql-성능-테스트를-위한-prometheus-grafana-통합-모니터링--)
 3. [💻개발환경](#-개발환경)
 4. [🛠️ Spring Boot 애플리케이션 성능 및 부하 테스트](#%EF%B8%8F-spring-boot-애플리케이션-성능-및-부하-테스트)
 5. [🛠️ MySQL 성능 및 부하 테스트](#%EF%B8%8F-mysql-성능-및-부하-테스트)
@@ -24,7 +24,7 @@
 
 ---
 
-## 🌱 프로젝트 개요: Spring Boot & MySQL 성능 테스트를 위한 Prometheus-Grafana 통합 모니터링 <br>
+## 🖥️ 프로젝트 개요: Spring Boot & MySQL 성능 테스트를 위한 Prometheus-Grafana 통합 모니터링 <br>
 
 **본 프로젝트의 목표는 Prometheus와 Grafana를 활용하여 시스템 및 애플리케이션의 모니터링 환경을 구축하고, 실시간 상태 시각화와 부하 테스트 대응 능력을 확인하는 것입니다.**
 
