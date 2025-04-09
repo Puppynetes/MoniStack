@@ -1,16 +1,16 @@
 <img src="https://capsule-render.vercel.app/api?type=waving&color=00C3FF&height=150&section=header" width="1000" />
 
 <div align="center">
-<h1 style="font-size: 36px;">🌱 Docker & K8s를 활용한<br> SpringBoot App 배포</h1>
+<h1 style="font-size: 36px;">🌱 Spring Boot & MySQL 성능 테스트를 위한 <br>Prometheus-Grafana 통합 모니터링</h1>
 </div>
 </br>
 
 ## 목차
 1. [🙆🏻‍♂️ 팀원](#%EF%B8%8F-팀원)
-2. [🌱 프로젝트 개요: Docker & K8s를 활용한 SpringBoot App 배포](#-프로젝트-개요-docker--k8s를-활용한-springboot-app-배포)
+2. [🌱 프로젝트 개요: Spring Boot & MySQL 성능 테스트를 위한 Prometheus-Grafana 통합 모니터링](#-프로젝트-개요-spring-boot--mysql-성능-테스트를-위한-prometheus-grafana-통합-모니터링-)
 3. [💻개발환경](#-개발환경)
-4. [🛠️ Spring Boot 애플리케이션 성능 및 부하 테스트](#%EF%B8%8F-#spring-boot-애플리케이션-성능-및-부하-테스트)
-5. [🛠️ MySQL 성능 및 부하 테스트](#%EF%B8%8F)
+4. [🛠️ Spring Boot 애플리케이션 성능 및 부하 테스트](#%EF%B8%8F-spring-boot-애플리케이션-성능-및-부하-테스트)
+5. [🛠️ MySQL 성능 및 부하 테스트](#%EF%B8%8F-mysql-성능-및-부하-테스트)
 6. [📖 배운 점](#-배운-점)
 7. [💜 회고](#-회고)
 
@@ -24,7 +24,7 @@
 
 ---
 
-📝 프로젝트 개요
+## 🌱 프로젝트 개요: Spring Boot & MySQL 성능 테스트를 위한 Prometheus-Grafana 통합 모니터링 <br>
 시스템 및 애플리케이션 모니터링 환경 구축을 목표
 Prometheus와 Grafana를 기반으로 상태 시각화 및 부하 테스트 대응 확인
 
@@ -41,31 +41,7 @@ Prometheus와 Grafana를 기반으로 상태 시각화 및 부하 테스트 대�
 
  ---
 
-### **설치 방식 선택 이유** <br>
 
-1️⃣ **Prometheus - 바이너리 설치** <br>
-- 설정 파일(prometheus.yml) 직접 수정하고 테스트하기 편함
-
- - 구조가 단순해서 디버깅, 포트 확인, 서비스 등록 등 제어권이 높음
-
-- 패키지 매니저 의존 없이 버전 선택 자유로움
-
-- 운영환경에 맞게 가볍게 커스터마이징 가능
-
-👉 설치 과정이 조금 수동적이긴 하지만, 구성 구조를 정확히 이해하고 직접 다루기에 적합 <br>
-
-2️⃣ **Grafana - APT 설치** <br>
-- APT를 통해 빠르고 안정적으로 설치 가능
-
-- 시스템 서비스 자동 등록 → systemctl로 바로 관리
-
-- 의존성 설치도 자동 처리돼서 세팅 간편
-
-- 업데이트도 apt upgrade로 손쉽게 가능
-
-👉 빠르게 설치하고 바로 웹에서 대시보드 구성 시작할 수 있음.
-
----
 ## 💻 개발환경  
 
 | 항목         | 사용 기술 및 도구          | 설명                                      |
@@ -78,7 +54,11 @@ Prometheus와 Grafana를 기반으로 상태 시각화 및 부하 테스트 대�
 | **모니터링**  | Prometheus       | 애플리케이션 및 시스템 메트릭 수집 |
 | **시각화**   | Grafana          | Prometheus 데이터를 기반으로 시각화 |
 
-## Spring Boot 애플리케이션 성능 및 부하 테스트
+---
+
+
+
+## 🛠️ Spring Boot 애플리케이션 성능 및 부하 테스트
 
 ### 1. build.gradle에 Prometheus와 Swagger 관련 의존성 설정
 
@@ -276,10 +256,10 @@ Exception: java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler i
 3. 과부화 테스트의 결과 확인 
 ![image (9)](https://github.com/user-attachments/assets/891fd9d1-0875-4b24-abf7-f641845f383d)
 
-## MySQL 성능 및 부하 테스트
+## 🛠️ MySQL 성능 및 부하 테스트
 
 
-# :compass: MySQL 모니터링 및 부하 테스트 전체 구성 흐름
+### :compass: MySQL 모니터링 및 부하 테스트 전체 구성 흐름
 
 ```
 sysbench (부하 생성)
@@ -411,3 +391,32 @@ sysbench \
   --tables=10 \
   oltp_read_write cleanup
 ```
+
+
+
+
+### **설치 방식 선택 이유** <br>
+
+1️⃣ **Prometheus - 바이너리 설치** <br>
+- 설정 파일(prometheus.yml) 직접 수정하고 테스트하기 편함
+
+ - 구조가 단순해서 디버깅, 포트 확인, 서비스 등록 등 제어권이 높음
+
+- 패키지 매니저 의존 없이 버전 선택 자유로움
+
+- 운영환경에 맞게 가볍게 커스터마이징 가능
+
+👉 설치 과정이 조금 수동적이긴 하지만, 구성 구조를 정확히 이해하고 직접 다루기에 적합 <br>
+
+2️⃣ **Grafana - APT 설치** <br>
+- APT를 통해 빠르고 안정적으로 설치 가능
+
+- 시스템 서비스 자동 등록 → systemctl로 바로 관리
+
+- 의존성 설치도 자동 처리돼서 세팅 간편
+
+- 업데이트도 apt upgrade로 손쉽게 가능
+
+👉 빠르게 설치하고 바로 웹에서 대시보드 구성 시작할 수 있음.
+
+---
