@@ -64,15 +64,15 @@
 
 ### 1. build.gradle에 Prometheus와 Swagger 관련 의존성 설정
 
-1️⃣ **`springdoc-openapi-starter-webmvc-ui`**
+ **`springdoc-openapi-starter-webmvc-ui`**
 
 - Swagger UI를 자동 설정하여 API 문서를 제공
 
-2️⃣ **`micrometer-registry-prometheus`**
+ **`micrometer-registry-prometheus`**
 
 - 애플리케이션 메트릭을 Prometheus 형식으로 노출해 Grafana에서 모니터링 가능
 
-3️⃣ **`spring-boot-starter-actuator`**
+**`spring-boot-starter-actuator`**
 
 - `/actuator/metrics`, `/actuator/prometheus` 등 애플리케이션 상태 및 성능 모니터링용 엔드포인트 제공
 
