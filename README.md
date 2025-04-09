@@ -11,8 +11,8 @@
 3. [💻개발환경](#-개발환경)
 4. [🛠️ Spring Boot 애플리케이션 성능 및 부하 테스트](#%EF%B8%8F-spring-boot-애플리케이션-성능-및-부하-테스트)
 5. [🛠️ MySQL 성능 및 부하 테스트](#%EF%B8%8F-mysql-성능-및-부하-테스트)
-6. [📖 배운 점](#-배운-점)
-7. [💜 회고](#-회고)
+
+---
 
 ## 🙆🏻‍♂️ 팀원
 
@@ -25,19 +25,21 @@
 ---
 
 ## 🌱 프로젝트 개요: Spring Boot & MySQL 성능 테스트를 위한 Prometheus-Grafana 통합 모니터링 <br>
-시스템 및 애플리케이션 모니터링 환경 구축을 목표
-Prometheus와 Grafana를 기반으로 상태 시각화 및 부하 테스트 대응 확인
 
-주요 내용
- Prometheus + Grafana 모니터링 스택 구성
+**본 프로젝트의 목표는 Prometheus와 Grafana를 활용하여 시스템 및 애플리케이션의 모니터링 환경을 구축하고, 실시간 상태 시각화와 부하 테스트 대응 능력을 확인하는 것입니다.**
 
- Node, MySQL, Spring Boot 메트릭 수집 및 시각화
+📌 주요 내용
+- Prometheus + Grafana 모니터링 스택 구성
 
- stress를 활용한 부하 테스트 수행
+- Node, MySQL, Spring Boot의 메트릭 수집 및 시각화
 
- Spring Boot /actuator/prometheus 연동
+- stress를 이용한 부하 테스트 수행
 
- 재부팅 후 대시보드 상태 유지 여부 확인 및 예외 처리
+- Spring Boot 애플리케이션과 /actuator/prometheus 엔드포인트 연동
+
+- 시스템 재부팅 후 대시보드 상태 유지 여부 확인 및 예외 상황 처리
+
+
 
  ---
 
@@ -274,7 +276,7 @@ Grafana (시각화)
 ```
 ---
 
-## :white_check_mark: 1. `mysqld_exporter` 정상 실행 확인
+## 1. `mysqld_exporter` 정상 실행 확인
 
 ```bash
 sudo mysqld_exporter --config.my-cnf="/etc/.my.cnf" --web.listen-address=":9104"
@@ -285,7 +287,7 @@ sudo mysqld_exporter --config.my-cnf="/etc/.my.cnf" --web.listen-address=":9104"
 
 ---
 
-## :white_check_mark: 2. Prometheus에서 `mysqld_exporter` 추가
+## 2. Prometheus에서 `mysqld_exporter` 추가
 
 `prometheus.yml` 파일에 다음 블록 추가
 
@@ -300,7 +302,7 @@ scrape_configs:
 
 ---
 
-## :white_check_mark: 3. Grafana에서 MySQL 대시보드 가져오기
+## 3. Grafana에서 MySQL 대시보드 가져오기
 
 1. Grafana에 로그인
 2. `Dashboards > Import` 메뉴로 이동
@@ -309,7 +311,7 @@ scrape_configs:
 
 ---
 
-## :white_check_mark: 4. `sysbench` 설치
+## 4. `sysbench` 설치
 
 ```bash
 sudo apt update
@@ -321,7 +323,7 @@ sudo apt install sysbench -y
 
 ---
 
-## :white_check_mark: 5. 사전 준비: 테이블 생성
+## 5. 사전 준비: 테이블 생성
 
 ```bash
 sysbench \
@@ -339,7 +341,7 @@ sysbench \
 
 ---
 
-## :white_check_mark: 6. 부하 테스트 실행
+## 6. 부하 테스트 실행
 
 ```bash
 sysbench \
@@ -359,7 +361,7 @@ sysbench \
 
 ---
 
-## :white_check_mark: 7. Grafana Dashboard 확인
+## 7. Grafana Dashboard 확인
 
 - Grafana에서 대시보드로 실시간 메트릭 확인
 - TPS, 커넥션 수, 쿼리 속도, 캐시 히트율 등 시각화 확인
@@ -369,7 +371,7 @@ sysbench \
 
 ---
 
-## :white_check_mark: 8. 테스트 후 정리
+## 8. 테스트 후 정리
 
 ```bash
 sysbench \
@@ -391,32 +393,5 @@ sysbench \
   --tables=10 \
   oltp_read_write cleanup
 ```
-
-
-
-
-### **설치 방식 선택 이유** <br>
-
-1️⃣ **Prometheus - 바이너리 설치** <br>
-- 설정 파일(prometheus.yml) 직접 수정하고 테스트하기 편함
-
- - 구조가 단순해서 디버깅, 포트 확인, 서비스 등록 등 제어권이 높음
-
-- 패키지 매니저 의존 없이 버전 선택 자유로움
-
-- 운영환경에 맞게 가볍게 커스터마이징 가능
-
-👉 설치 과정이 조금 수동적이긴 하지만, 구성 구조를 정확히 이해하고 직접 다루기에 적합 <br>
-
-2️⃣ **Grafana - APT 설치** <br>
-- APT를 통해 빠르고 안정적으로 설치 가능
-
-- 시스템 서비스 자동 등록 → systemctl로 바로 관리
-
-- 의존성 설치도 자동 처리돼서 세팅 간편
-
-- 업데이트도 apt upgrade로 손쉽게 가능
-
-👉 빠르게 설치하고 바로 웹에서 대시보드 구성 시작할 수 있음.
 
 ---
